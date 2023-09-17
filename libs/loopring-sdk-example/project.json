@@ -2,12 +2,12 @@
   "name": "loopring-sdk-example",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "lib/loopring-sdk-example",
+  "sourceRoot": "libs/loopring-sdk-example",
   "targets": {
-    "build": {
+    "build-android": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "lib/loopring-sdk-example",
+        "cwd": "libs/loopring-sdk-example",
         "commands": [
           {
             "command": "gomobile bind -o ../../dist/loopring-sdk-example/loopring-sdk-example.aar -target=android",
@@ -16,10 +16,22 @@
         ]
       }
     },
+    "build-ios": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/loopring-sdk-example",
+        "commands": [
+          {
+            "command": "gomobile bind -o ../../dist/loopring-sdk-example/Loopringsdk.xcframework -target=ios",
+            "forwardAllArgs": false
+          }
+        ]
+      }
+    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "lib/loopring-sdk-example",
+        "cwd": "libs/loopring-sdk-example",
         "commands": [
           {
             "command": "go fmt ./...",
@@ -29,5 +41,7 @@
       }
     }
   },
-  "tags": ["type:go"]
+  "tags": [
+    "type:go"
+  ]
 }
