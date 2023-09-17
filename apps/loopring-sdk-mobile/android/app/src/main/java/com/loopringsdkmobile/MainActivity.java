@@ -5,8 +5,6 @@ import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 
-import loopringsdk.Loopringsdk;
-
 public class MainActivity extends ReactActivity {
 
   /**
@@ -15,14 +13,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    try {
-      System.out.println("loopringstuff");
-      System.out.println(Loopringsdk.stuff());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-
     return "LoopringSdkMobile";
   }
 
