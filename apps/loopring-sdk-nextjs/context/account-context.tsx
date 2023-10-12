@@ -94,7 +94,7 @@ export function useAccountContext() {
   const contextValue = useContext(AccountContext);
 
   if (!contextValue) {
-    throw new Error('No unlock context found');
+    throw new Error('No account context found');
   }
 
   return contextValue;
