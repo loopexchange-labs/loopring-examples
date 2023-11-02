@@ -259,3 +259,5 @@ yarn-error.log
 
 
 apps/loopring-sdk-mobile-e2e/artifacts
+
+.nx/cache
