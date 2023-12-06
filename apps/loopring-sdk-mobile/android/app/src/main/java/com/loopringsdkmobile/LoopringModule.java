@@ -24,18 +24,20 @@ public class LoopringModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void generateKeyPair(String signature, Promise promise) {
+  public void genSigWithPadding(String privateKey, String hash, Promise promise) {
+    final String sigWithPadding = Loopringsdk.genSigWithPadding(privateKey, hash);
+
+    promise.resolve(sigWithPadding);
+  }
+
+  @ReactMethod
+  public void signRequest(String privateKey, String method, String baseUrl, String path, String data, Promise promise) {
     try {
-      final loopringsdk.KeyPair keyPair = Loopringsdk.generateKeyPair(signature);
-      final WritableMap map = Arguments.createMap();
+      final String signature = Loopringsdk.signRequest(privateKey, method, baseUrl, path, data);
 
-      map.putString("sk", keyPair.getSk());
-      map.putString("x", keyPair.getX());
-      map.putString("y", keyPair.getY());
-
-      promise.resolve(map);
+      promise.resolve(signature);
     } catch(Exception e) {
-      promise.reject("generateKeyPair error", e);
+      promise.reject("signRequest error", e);
     }
   }
 }

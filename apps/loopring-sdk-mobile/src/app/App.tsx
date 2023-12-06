@@ -12,23 +12,27 @@ import {
 
 import LoopringModule from '../module/LoopringModule';
 
-const unlockSignature =
-  '0xa6bd206701d1aaa1d45d6ab870e5e17801a6d98fb4440a02bab58e7ab762a55a5495da27508c529b7bab192baf819c600ed6fc474bac0fb87a7733b6257af92f1b';
+const hash =
+  '0x25520a5d8eeba3449c86a3a4ccc9c99e38b72c334192d6dbe022ae31adcbba2c';
+
+// It's just the private key from the unit tests of loopring_sdk
+const privateKey =
+  '0x2abaf07fe8669180cee9bd3e7058a4aa0d3addb4ef9509e78d5808bdff4b6ea';
 
 export const App = () => {
-  const [sk, setSk] = React.useState<string>('');
+  const [sigWithPadding, setSigWithPadding] = React.useState<string>('');
   const [time, setTime] = React.useState<number>(0);
 
-  const onPressUnlock = useCallback(async () => {
+  const onPress = useCallback(async () => {
     const t0 = performance.now();
-    let signature;
+    let signature: string;
     for (let i = 0; i < 1000; i++) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      signature = await LoopringModule.generateKeyPair(unlockSignature);
+      signature = await LoopringModule.genSigWithPadding(privateKey, hash);
     }
     const t1 = performance.now();
     setTime(t1 - t0);
-    setSk(signature.sk);
+    setSigWithPadding(signature);
   }, []);
 
   return (
@@ -38,15 +42,14 @@ export const App = () => {
         <ScrollView style={styles.scrollView}>
           <View style={styles.section}>
             <Text style={{ marginBottom: 10 }}>Hello, Loopring</Text>
-            <Text style={{ marginBottom: 10 }}>
-              Unlock Signature: {unlockSignature}
-            </Text>
-            <Button onPress={onPressUnlock} title="Unlock" color="#4169e1" />
+            <Text style={{ marginBottom: 10 }}>Hash: {hash}</Text>
+            <Text style={{ marginBottom: 10 }}>Private Key: {privateKey}</Text>
+            <Button onPress={onPress} title="Calculate" color="#4169e1" />
             <Text style={{ marginBottom: 10, marginTop: 10 }}>
-              Private Key: {sk}
+              sigWithPadding: {sigWithPadding}
             </Text>
             <Text style={{ marginBottom: 10 }}>
-              Call to 1000 onPressUnlock took {time} milliseconds.
+              Call to 1000 genSigWithPadding took {time} milliseconds.
             </Text>
           </View>
         </ScrollView>
