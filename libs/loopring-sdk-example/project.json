@@ -10,6 +10,10 @@
         "cwd": "libs/loopring-sdk-example",
         "commands": [
           {
+            "command": "mkdir -p ../../dist/loopring-sdk-example",
+            "forwardAllArgs": false
+          },
+          {
             "command": "gomobile bind -o ../../dist/loopring-sdk-example/loopring-sdk-example.aar -target=android",
             "forwardAllArgs": false
           }
@@ -21,6 +25,10 @@
       "options": {
         "cwd": "libs/loopring-sdk-example",
         "commands": [
+          {
+            "command": "mkdir -p ../../dist/loopring-sdk-example",
+            "forwardAllArgs": false
+          },
           {
             "command": "gomobile bind -o ../../dist/loopring-sdk-example/Loopringsdk.xcframework -target=ios",
             "forwardAllArgs": false
@@ -41,7 +49,5 @@
       }
     }
   },
-  "tags": [
-    "type:go"
-  ]
+  "tags": ["type:go"]
 }
