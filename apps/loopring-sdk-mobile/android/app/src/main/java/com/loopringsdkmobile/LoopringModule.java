@@ -24,10 +24,14 @@ public class LoopringModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void genSigWithPadding(String privateKey, String hash, Promise promise) {
-    final String sigWithPadding = Loopringsdk.genSigWithPadding(privateKey, hash);
+  public void fudgeyBenchmark(Promise promise) {
+    try {
+      final String signature = Loopringsdk.fudgeyBenchmark();
 
-    promise.resolve(sigWithPadding);
+      promise.resolve(signature);
+    } catch(Exception e) {
+      promise.reject("fudgeyBenchmark error", e);
+    }
   }
 
   @ReactMethod

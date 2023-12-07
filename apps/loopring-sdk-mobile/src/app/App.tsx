@@ -12,27 +12,42 @@ import {
 
 import LoopringModule from '../module/LoopringModule';
 
-const hash =
-  '0x25520a5d8eeba3449c86a3a4ccc9c99e38b72c334192d6dbe022ae31adcbba2c';
-
 // It's just the private key from the unit tests of loopring_sdk
 const privateKey =
   '0x2abaf07fe8669180cee9bd3e7058a4aa0d3addb4ef9509e78d5808bdff4b6ea';
 
 export const App = () => {
-  const [sigWithPadding, setSigWithPadding] = React.useState<string>('');
-  const [time, setTime] = React.useState<number>(0);
+  const [fudgeySignature, setFudgeySignature] = React.useState<string>('');
+  const [fudgeyTime, setFudgeyTime] = React.useState<number>(0);
 
-  const onPress = useCallback(async () => {
+  const [requestSignature, setRequestSignature] = React.useState<string>('');
+  const [requestTime, setRequestTime] = React.useState<number>(0);
+
+  const onFudgeyBenchmark = useCallback(async () => {
+    const t0 = performance.now();
+
+    // The underlying function is called 1000 times in the native module
+    setFudgeySignature(await LoopringModule.fudgeyBenchmark());
+
+    const t1 = performance.now();
+    setFudgeyTime(t1 - t0);
+  }, []);
+
+  const onPressSignRequest = useCallback(async () => {
     const t0 = performance.now();
     let signature: string;
     for (let i = 0; i < 1000; i++) {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      signature = await LoopringModule.genSigWithPadding(privateKey, hash);
+      signature = await LoopringModule.signRequest(
+        privateKey,
+        'GET',
+        'https://uat2.loopring.io',
+        '/api/v3/resource',
+        'accountId%3D10149'
+      );
     }
     const t1 = performance.now();
-    setTime(t1 - t0);
-    setSigWithPadding(signature);
+    setRequestTime(t1 - t0);
+    setRequestSignature(signature);
   }, []);
 
   return (
@@ -42,14 +57,35 @@ export const App = () => {
         <ScrollView style={styles.scrollView}>
           <View style={styles.section}>
             <Text style={{ marginBottom: 10 }}>Hello, Loopring</Text>
-            <Text style={{ marginBottom: 10 }}>Hash: {hash}</Text>
-            <Text style={{ marginBottom: 10 }}>Private Key: {privateKey}</Text>
-            <Button onPress={onPress} title="Calculate" color="#4169e1" />
+            <Button
+              onPress={onFudgeyBenchmark}
+              title="Run Fudgey Benchmark"
+              color="#4169e1"
+            />
             <Text style={{ marginBottom: 10, marginTop: 10 }}>
-              sigWithPadding: {sigWithPadding}
+              Signature: {fudgeySignature}
             </Text>
-            <Text style={{ marginBottom: 10 }}>
-              Call to 1000 genSigWithPadding took {time} milliseconds.
+            <Text style={{ marginBottom: 60, fontWeight: 'bold' }}>
+              Call to 1000 SignPoseidon took {fudgeyTime} milliseconds.
+            </Text>
+
+            <Text style={{ marginBottom: 5 }}>Private Key: {privateKey}</Text>
+            <Text style={{ marginBottom: 5 }}>Method: GET</Text>
+            <Text style={{ marginBottom: 5 }}>
+              BaseURL: https://uat2.loopring.io
+            </Text>
+            <Text style={{ marginBottom: 5 }}>Path: /api/v3/resource</Text>
+            <Text style={{ marginBottom: 10 }}>Params: accountId%3D10149</Text>
+            <Button
+              onPress={onPressSignRequest}
+              title="Run SignRequest Benchmark"
+              color="#4169e1"
+            />
+            <Text style={{ marginBottom: 10, marginTop: 10 }}>
+              requestSignature: {requestSignature}
+            </Text>
+            <Text style={{ marginBottom: 10, fontWeight: 'bold' }}>
+              Call to 1000 signRequest took {requestTime} milliseconds.
             </Text>
           </View>
         </ScrollView>

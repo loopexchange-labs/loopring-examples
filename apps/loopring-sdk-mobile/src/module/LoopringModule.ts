@@ -1,7 +1,7 @@
 import { NativeModules } from 'react-native';
 const { LoopringModule } = NativeModules;
 interface LoopringInterface {
-  genSigWithPadding(privateKey: string, hash: string): Promise<string>;
+  fudgeyBenchmark(): Promise<string>;
   signRequest(
     privateKey: string,
     method: string,
